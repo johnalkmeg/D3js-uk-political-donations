@@ -6,8 +6,8 @@ var force, node, data, maxVal;
 var brake = 0.2;
 var radius = d3.scale.sqrt().range([10, 20]);
 
-var click = new Audio();
-click.src = "click.mp3";
+var dongdong = new Audio();
+dongdong.src = "click.mp3";
 
 var partyCentres = { 
     con: { x: w / 3, y: h / 3.3}, 
@@ -45,7 +45,7 @@ var tooltip = d3.select("#chart")
 var comma = d3.format(",.0f");
 
 function transition(name) {
-	click.play();
+	dongdong.play();
 	if (name === "all-donations") {
 		$("#initial-content").fadeIn(250);
 		$("#value-scale").fadeIn(1000);
