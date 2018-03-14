@@ -320,6 +320,9 @@ function mouseover(d, i) {
 	var party = d.partyLabel;
 	var entity = d.entityLabel;
 	var offset = $("svg").offset();
+	responsiveVoice.cancel();
+    	responsiveVoice.speak(donor);
+	responsiveVoice.speak(amount+'British Pounds');
 	
 
 
@@ -354,6 +357,7 @@ function mouseover(d, i) {
 	}
 
 function mouseout() {
+		responsiveVoice.cancel();
 	// no more tooltips
 		var mosie = d3.select(this);
 
