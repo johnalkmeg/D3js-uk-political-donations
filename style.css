@@ -4,7 +4,7 @@ body {
 }
 li:hover, h2:hover, h3:hover, h4:hover, h5:hover, p:hover, strong:hover{
 color: navy;
-font-size: 140%;
+font-size: 160%;
 line-height:20pt;
 transition: all 0.75s;
 }
