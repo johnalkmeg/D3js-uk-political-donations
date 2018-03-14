@@ -2,6 +2,12 @@ body {
     background-color: #fcc379;
     font-family:'Raleway', 'Open Sans', sans-serif;
 }
+li:hover, h2:hover, h3:hover, h4:hover, h5:hover, p:hover, strong:hover{
+color: navy;
+font-size: 140%;
+line-height:20pt;
+transition: all 0.75s;
+}
 p {
     margin: 5px 0;
 }
