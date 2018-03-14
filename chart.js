@@ -51,12 +51,14 @@ function transition(name) {
 		$("#value-scale").fadeIn(1000);
 		$("#view-donor-type").fadeOut(250);
 		$("#view-source-type").fadeOut(250);
+		$("#view-amount-type").fadeOut(250);
 		$("#view-party-type").fadeOut(250);
 		return total();
 		//location.reload();
 	}
 	if (name === "group-by-party") {
 		$("#initial-content").fadeOut(250);
+		$("#view-amount-type").fadeOut(250);
 		$("#value-scale").fadeOut(250);
 		$("#view-donor-type").fadeOut(250);
 		$("#view-source-type").fadeOut(250);
@@ -68,16 +70,27 @@ function transition(name) {
 		$("#value-scale").fadeOut(250);
 		$("#view-party-type").fadeOut(250);
 		$("#view-source-type").fadeOut(250);
+		$("#view-amount-type").fadeOut(250);
 		$("#view-donor-type").fadeIn(1000);
 		return donorType();
 	}
-	if (name === "group-by-money-source")
+	if (name === "group-by-money-source"){
 		$("#initial-content").fadeOut(250);
 		$("#value-scale").fadeOut(250);
 		$("#view-donor-type").fadeOut(250);
 		$("#view-party-type").fadeOut(250);
+		$("#view-amount-type").fadeOut(250);
 		$("#view-source-type").fadeIn(1000);
 		return fundsType();
+	}
+	if (name === "group-by-amount") 
+		$("#initial-content").fadeOut(250);
+		$("#value-scale").fadeOut(250);
+		$("#view-donor-type").fadeOut(250);
+		$("#view-party-type").fadeOut(250);
+		$("#view-source-type").fadeOut(250);
+		$("#view-amount-type").fadeIn(1000);
+		return amountType();
 	}
 
 function start() {
@@ -154,6 +167,14 @@ function parties(e) {
 			.attr("cy", function(d) {return d.y; });
 }
 
+function amountType() {
+	force.gravity(0)
+		.friction(0.75)
+		.charge(function(d) { return -Math.pow(d.radius, 2.0) / 3; })
+		.on("tick", amounts)
+		.start();
+}
+
 function entities(e) {
 	node.each(moveToEnts(e.alpha));
 
@@ -164,11 +185,17 @@ function entities(e) {
 function types(e) {
 	node.each(moveToFunds(e.alpha));
 
-
 		node.attr("cx", function(d) { return d.x; })
 			.attr("cy", function(d) {return d.y; });
 }
 
+function amounts(e) {
+	node.each(moveToAmounts(e.alpha));
+	
+		node.attr("cx", function(d) { return d.x; })
+			.attr("cy", function(d) {return d.y; });
+}
+	
 function all(e) {
 	node.each(moveToCentre(e.alpha))
 		.each(collide(0.001));
@@ -230,6 +257,28 @@ function moveToEnts(alpha) {
 	};
 }
 
+function moveToAmounts(alpha) {
+	return function(d) {
+		var centreY = entityCentres[d.entity].y;
+		var centreX = entityCentres[d.entity].x;
+		if (d.value <= 25000) { 
+			centreX = svgCentre.x ;
+			centreY = svgCentre.y;
+		} else if (d.value <= 250000) { 
+			centreX = svgCentre.x + 150;
+			centreY = svgCentre.y;
+		} else if (d.value <= 9999999){ 
+			centreX = svgCentre.x + 300;
+			centreY = svgCentre.y;
+		}else{
+			centreX = svgCentre.x + 450;
+			centreY = svgCentre.y;
+		}
+
+		d.x += (centreX - d.x) * (brake + 0.02) * alpha * 1.1;
+		d.y += (centreY - d.y) * (brake + 0.02) * alpha * 1.1;
+	};
+}
 function moveToFunds(alpha) {
 	return function(d) {
 		var centreY = entityCentres[d.entity].y;
@@ -245,6 +294,8 @@ function moveToFunds(alpha) {
 		d.y += (centreY - d.y) * (brake + 0.02) * alpha * 1.1;
 	};
 }
+
+
 
 // Collision detection function by m bostock
 function collide(alpha) {
